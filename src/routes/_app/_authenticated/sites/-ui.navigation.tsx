@@ -1,7 +1,8 @@
-import { LogOut, Menu, Settings } from "lucide-react";
+import { LogOut, Menu, Moon, Settings, Sun } from "lucide-react";
 
 import { Button } from "@/components/retroui/button";
 import { Text } from "@/components/retroui/text";
+import { useTheme } from "@/components/theme-provider";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -20,6 +21,7 @@ export function Navigation({ user }: { user: Doc<"users"> }) {
 	const navigate = useNavigate();
 	const isSitesPath = matchRoute({ to: "/sites" });
 	const isSettingsPath = matchRoute({ to: "/sites/settings" });
+	const { setTheme, theme } = useTheme();
 
 	if (!user) {
 		return null;
@@ -126,12 +128,45 @@ export function Navigation({ user }: { user: Doc<"users"> }) {
 								)}
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent sideOffset={8} align="end">
+						<DropdownMenuContent
+							sideOffset={8}
+							align="end"
+							className="bg-background"
+						>
 							<DropdownMenuItem className="flex-col items-start">
 								<p className="text-sm font-medium text-foreground">
 									{user?.username || ""}
 								</p>
 								<p className="text-sm text-muted-foreground">{user?.email}</p>
+							</DropdownMenuItem>
+
+							<DropdownMenuSeparator className="mx-0 my-2 h-[1px] bg-border" />
+							<DropdownMenuItem className="inline-flex items-center justify-between w-full">
+								<p>Theme:</p>{" "}
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button variant="outline" size="icon">
+											<Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+											<Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+											<span className="sr-only">Toggle theme</span>
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent
+										defaultValue={theme}
+										align="end"
+										className="bg-background"
+									>
+										<DropdownMenuItem onClick={() => setTheme("light")}>
+											Light
+										</DropdownMenuItem>
+										<DropdownMenuItem onClick={() => setTheme("dark")}>
+											Dark
+										</DropdownMenuItem>
+										<DropdownMenuItem onClick={() => setTheme("system")}>
+											System
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
 							</DropdownMenuItem>
 
 							<DropdownMenuSeparator className="mx-0 my-2 h-[1px] bg-border" />

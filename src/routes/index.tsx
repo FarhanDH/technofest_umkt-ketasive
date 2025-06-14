@@ -1,10 +1,11 @@
 import { Button } from "@/components/retroui/button";
+
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
-import { SignInButton, SignUp } from "@clerk/clerk-react";
+import { SignInButton } from "@clerk/clerk-react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useConvexAuth } from "convex/react";
-import { Loader2, Send, SendHorizonal } from "lucide-react";
+import { Loader2, SendHorizonal } from "lucide-react";
 
 export const Route = createFileRoute("/")({
 	component: Index,
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
 	const { isLoading, isAuthenticated } = useConvexAuth();
+
 	return (
 		<div className="relative flex h-full w-full flex-col bg-card">
 			{/* Navigation */}
@@ -106,8 +108,9 @@ export function HeroSection() {
 					className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400"
 				>
 					Dengan Wira, balas pesan customer dalam hitungan detik, bukan jam.
-					Coba layanan terbaik kami dengan UI yang modern dan teknologi AI untuk
-					memaksimalkan layanan mu.
+					Coba layanan terbaik aktif{" "}
+					<span className="font-extrabold">24 Jam</span> dan dengan teknologi AI
+					untuk memaksimalkan layanan mu.
 				</motion.p>
 				<motion.div
 					initial={{
