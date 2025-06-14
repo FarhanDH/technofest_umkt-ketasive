@@ -113,19 +113,19 @@ function RouteComponent() {
 					>
 						<div className="flex flex-col gap-4 p-4">
 							<div className="space-y-2">
-								<Label htmlFor="name">Name</Label>
+								<Label htmlFor="name">Nama Website</Label>
 								<Input
 									id="name"
-									placeholder="Your site name"
+									placeholder="Cth: Website Jual Bonsai"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
 								/>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="domain">Domain</Label>
+								<Label htmlFor="domain">Domain Website</Label>
 								<Input
 									id="domain"
-									placeholder="Your domain"
+									placeholder="Cth: https://example.com"
 									value={domain}
 									onChange={(e) => setDomain(e.target.value)}
 								/>
@@ -133,7 +133,7 @@ function RouteComponent() {
 
 							<div className="flex items-center justify-end">
 								<Button type={"button"} onClick={handleCreateSite}>
-									Save and Crawl
+									Simpan dan telusuri
 								</Button>
 							</div>
 						</div>

@@ -53,13 +53,22 @@ function RouteComponent() {
 	const [isSiteDetailOnboarded, setIsSiteDetailOnboarded] =
 		useLocalStorage<boolean>("is-site-detail-onboarded", false);
 
+	// useEffect(() => {
+	// 	if (dummyLoading) {
+	// 		setTimeout(() => {
+	// 			setDummyLoading(false);
+	// 		}, 7500);
+	// 	}
+	// }, [dummyLoading, setDummyLoading]);
+
 	useEffect(() => {
-		if (dummyLoading) {
-			setTimeout(() => {
-				setDummyLoading(false);
-			}, 7500);
+		if (siteDetail?.pages.length === 0) {
+			setDummyLoading(true);
+			return;
 		}
-	}, [dummyLoading, setDummyLoading]);
+
+		setDummyLoading(false);
+	}, [setDummyLoading, siteDetail]);
 
 	const driverObj = driver({
 		showProgress: true,
