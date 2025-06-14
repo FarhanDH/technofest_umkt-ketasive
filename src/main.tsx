@@ -14,6 +14,7 @@ import { ThemeProvider } from "./components/theme-provider.tsx";
 import { env } from "./env.ts";
 import reportWebVitals from "./reportWebVitals.ts";
 import "./styles.css";
+import { Toaster } from "./components/retroui/sonner.tsx";
 
 // Create a new router instance
 const router = createRouter({
@@ -78,6 +79,7 @@ if (rootElement && !rootElement.innerHTML) {
 					<ConvexProviderWithClerk client={convex} useAuth={useAuth}>
 						<QueryClientProvider client={queryClient}>
 							<InnerApp />
+							<Toaster />
 						</QueryClientProvider>
 					</ConvexProviderWithClerk>
 				</ClerkProvider>

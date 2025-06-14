@@ -17,7 +17,6 @@ export default defineSchema({
 		language: v.optional(v.string()),
 		logoUrl: v.optional(v.string()),
 		active: v.boolean(),
-		createdAt: v.number(),
 	})
 		.index("by_user_id", ["userId"])
 		.index("by_domain", ["domain"]),
@@ -48,7 +47,6 @@ export default defineSchema({
 		title: v.optional(v.string()),
 		content: v.string(),
 		embedding: v.optional(v.array(v.float64())),
-		createdAt: v.number(),
 	})
 		.index("by_site_id", ["siteId"])
 		.vectorIndex("by_embedding", {
@@ -60,9 +58,10 @@ export default defineSchema({
 	sessions: defineTable({
 		siteId: v.id("sites"),
 		userIdentifier: v.string(),
-		createdAt: v.number(),
 		threadId: v.string(),
-	}).index("by_site_id", ["siteId"]),
+	})
+		.index("by_site_id", ["siteId"])
+		.index("by_identifier", ["userIdentifier"]),
 
 	chat_settings: defineTable({
 		siteId: v.id("sites"),

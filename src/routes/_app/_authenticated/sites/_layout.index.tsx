@@ -1,20 +1,28 @@
 import { HeaderConfiguration } from "@/components/header-provider";
+import { Badge } from "@/components/retroui/badge";
+import { Button } from "@/components/retroui/button";
+import { Card } from "@/components/retroui/card";
+import { closeRetroDialog } from "@/components/retroui/dialog";
+import { Input } from "@/components/retroui/input";
+import { Label } from "@/components/retroui/label";
 import { Text } from "@/components/retroui/text";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { closeDrawerDialog } from "@/components/ui/drawer";
+import { LinkPreview } from "@/components/ui/link-preview";
 import { ResponsiveDrawer } from "@/components/ui/responsive-drawer";
+import { Skeleton } from "@/components/ui/skeleton";
 import siteConfig from "@/site.config";
+import { convexQuery } from "@convex-dev/react-query";
+import { api } from "@cvx/_generated/api";
+import type { Doc } from "@cvx/_generated/dataModel";
+import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { useAction } from "convex/react";
+import { driver } from "driver.js";
 import { Plus, SendHorizonal } from "lucide-react";
 import type React from "react";
+import { useEffect, useState } from "react";
+import "driver.js/dist/driver.css";
+import { useLocalStorage } from "usehooks-ts";
 
 export const Route = createFileRoute("/_app/_authenticated/sites/_layout/")({
 	component: RouteComponent,
@@ -24,74 +32,115 @@ export const Route = createFileRoute("/_app/_authenticated/sites/_layout/")({
 	ssr: true,
 });
 
-const SAMPLE_SITES = [
-	{
-		title: "Rumah Makan Minang",
-		url: "https://minangku.co.id",
-		siteId: "1",
-	},
-	{
-		title: "Amplang Samarinda Abadi",
-		url: "https://amplang-samarinda.co.id",
-		siteId: "2",
-	},
-	{
-		title: "Bricket Indonesia",
-		url: "https://bricket-id.com",
-		siteId: "3",
-	},
-];
-
 function RouteComponent() {
+	const { data: sites, isLoading } = useQuery(
+		convexQuery(api.sites.getSites, {}),
+	);
+	const createAndCrawl = useAction(api.sites.createAndCrawlSite);
+
+	const [isSitesOnboarded, setIsSitesOnboarded] = useLocalStorage(
+		"is-sites-onboarded",
+		false,
+	);
+
+	const [name, setName] = useState<string>("");
+	const [domain, setDomain] = useState<string>("");
+
+	const handleCreateSite = async () => {
+		await createAndCrawl({
+			name,
+			domain,
+		});
+
+		setName("");
+		setDomain("");
+		closeRetroDialog();
+		closeDrawerDialog();
+	};
+
+	const driverObj = driver({
+		showProgress: true,
+		steps: [
+			{
+				element: ".add-site",
+				popover: {
+					title: "Tambahkan situs",
+					description:
+						"Tambahkan situs untuk memulai crawling dan menggunakan chatbot",
+				},
+			},
+		],
+		onDestroyed: () => setIsSitesOnboarded(true),
+	});
+
+	useEffect(() => {
+		if (!isSitesOnboarded) {
+			driverObj.drive();
+		}
+	}, [isSitesOnboarded, setIsSitesOnboarded]);
+
 	return (
 		<>
 			<HeaderConfiguration
 				headerDescription="Manage Your Sites."
 				headerTitle="Sites"
 			/>
-			<div className="flex h-full w-full bg-secondary px-6 py-8 dark:bg-black">
-				<div className="z-10 mx-auto flex h-full w-full max-w-screen-xl gap-12 flex-wrap">
+
+			<div className="flex h-full w-full  px-6 py-8">
+				<div className="z-10 mx-auto h-full w-full max-w-screen-xl gap-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  flex-wrap">
 					<ResponsiveDrawer
 						title="Tambahkan situs baru"
-						description="..."
 						triggerComp={
-							<Card className="w-[350px] h-[200px] justify-between border-dashed border shadow-none base-grid">
-								<CardHeader>
-									<CardTitle>
+							<Card className="w-full  add-site h-[200px] justify-between">
+								<Card.Header>
+									<Card.Title>
 										<Text as={"h6"}>Tambahkan Situs</Text>
-									</CardTitle>
-								</CardHeader>
-								<CardFooter className="flex items-center justify-between">
+									</Card.Title>
+								</Card.Header>
+								<Card.Content className="flex items-center h-full justify-between">
 									<Text
 										as={"p"}
 										className="text-xs text-muted-foreground font-mono"
 									>
 										Ayo tambahkan situs baru
 									</Text>
-									<Button size={"icon"}>
+									<Button variant={"secondary"} size={"icon"}>
 										<Plus />
 									</Button>
-								</CardFooter>
+								</Card.Content>
 							</Card>
 						}
 					>
-						<div className="flex flex-col gap-4">
+						<div className="flex flex-col gap-4 p-4">
 							<div className="space-y-2">
-								<Label htmlFor="title">Title</Label>
-								<Input id="title" placeholder="Your site title" />
+								<Label htmlFor="name">Name</Label>
+								<Input
+									id="name"
+									placeholder="Your site name"
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+								/>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="siteUrl">Site URL</Label>
-								<Input id="siteUrl" placeholder="Your site url" />
+								<Label htmlFor="domain">Domain</Label>
+								<Input
+									id="domain"
+									placeholder="Your domain"
+									value={domain}
+									onChange={(e) => setDomain(e.target.value)}
+								/>
 							</div>
 
 							<div className="flex items-center justify-end">
-								<Button>Save and Crawl</Button>
+								<Button type={"button"} onClick={handleCreateSite}>
+									Save and Crawl
+								</Button>
 							</div>
 						</div>
 					</ResponsiveDrawer>
-					{SAMPLE_SITES.map((item) => (
-						<SiteItem key={item.url} {...item} />
+					{isLoading && [1, 2, 3].map((itm) => <Skeleton key={itm} />)}
+					{sites?.map((item) => (
+						<SiteItem key={item._id} {...item} />
 					))}
 				</div>
 			</div>
@@ -99,34 +148,46 @@ function RouteComponent() {
 	);
 }
 
-type SiteItemProps = {
-	title: string;
-	url: string;
-	siteId: string;
+const SiteItemLSkeleton = () => {
+	return <Skeleton className="w-full h-[200px]" />;
 };
-const SiteItem: React.FC<SiteItemProps> = ({ title, url, siteId }) => {
+
+type SiteItemProps = Doc<"sites">;
+const SiteItem: React.FC<SiteItemProps> = (props) => {
 	return (
-		<Link
-			to="/sites/$siteId"
-			params={{
-				siteId,
-			}}
-		>
-			<Card className="w-[350px] h-[200px] justify-between">
-				<CardHeader>
-					<CardTitle>
-						<Text as={"h6"}>{title}</Text>
-					</CardTitle>
-				</CardHeader>
-				<CardFooter className="flex items-center justify-between">
-					<Text as={"p"} className="text-xs text-muted-foreground font-mono">
-						{url}
-					</Text>
-					<Button size={"icon"}>
-						<SendHorizonal />
-					</Button>
-				</CardFooter>
-			</Card>
-		</Link>
+		<Card className="w-full h-[200px] justify-between">
+			<Card.Header className="">
+				<Text as={"h5"} className="mb-2">
+					{props.name}
+				</Text>
+			</Card.Header>
+			<Card.Content className="flex flex-col mt-6">
+				<Badge variant={"default"} className="text-xs w-fit">
+					{props.active ? "Aktif" : "Tidak Aktif"}
+				</Badge>
+				<div className="flex items-center justify-between">
+					<LinkPreview url={props.domain} className="w-full">
+						<Text
+							as={"p"}
+							className="text-xs text-muted-foreground font-mono max-w-[80%]"
+						>
+							{props.domain.length > 22
+								? `${props.domain.slice(0, 22)}...`
+								: props.domain}
+						</Text>
+					</LinkPreview>
+					<Link
+						to="/sites/$siteId"
+						params={{
+							siteId: props._id,
+						}}
+					>
+						<Button size={"icon"}>
+							<SendHorizonal />
+						</Button>
+					</Link>
+				</div>
+			</Card.Content>
+		</Card>
 	);
 };

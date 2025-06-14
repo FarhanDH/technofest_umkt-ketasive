@@ -16,11 +16,18 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppAuthenticatedImport } from './routes/_app/_authenticated'
+import { Route as AppEmbedChatImport } from './routes/_app/embed/chat'
 import { Route as AppAuthenticatedSitesLayoutImport } from './routes/_app/_authenticated/sites/_layout'
 import { Route as AppAuthenticatedOnboardingLayoutImport } from './routes/_app/_authenticated/onboarding/_layout'
+import { Route as AppAuthenticatedSitesSiteIdRouteImport } from './routes/_app/_authenticated/sites/$siteId/route'
 import { Route as AppAuthenticatedSitesLayoutIndexImport } from './routes/_app/_authenticated/sites/_layout.index'
 import { Route as AppAuthenticatedSitesSiteIdIndexImport } from './routes/_app/_authenticated/sites/$siteId/index'
 import { Route as AppAuthenticatedSitesLayoutSettingsImport } from './routes/_app/_authenticated/sites/_layout.settings'
+import { Route as AppAuthenticatedSitesSiteIdSettingsImport } from './routes/_app/_authenticated/sites/$siteId/settings'
+import { Route as AppAuthenticatedSitesSiteIdSessionsImport } from './routes/_app/_authenticated/sites/$siteId/sessions'
+import { Route as AppAuthenticatedSitesSiteIdContextsImport } from './routes/_app/_authenticated/sites/$siteId/contexts'
+import { Route as AppAuthenticatedSitesSiteIdAiChatImport } from './routes/_app/_authenticated/sites/$siteId/ai-chat'
+import { Route as AppAuthenticatedSitesSiteIdPageIdImport } from './routes/_app/_authenticated/sites/$siteId/$pageId'
 import { Route as AppAuthenticatedOnboardingLayoutUsernameImport } from './routes/_app/_authenticated/onboarding/_layout.username'
 import { Route as AppAuthenticatedSitesLayoutSettingsIndexImport } from './routes/_app/_authenticated/sites/_layout.settings.index'
 
@@ -65,6 +72,12 @@ const AppAuthenticatedOnboardingRoute = AppAuthenticatedOnboardingImport.update(
   } as any,
 )
 
+const AppEmbedChatRoute = AppEmbedChatImport.update({
+  id: '/embed/chat',
+  path: '/embed/chat',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppAuthenticatedSitesLayoutRoute =
   AppAuthenticatedSitesLayoutImport.update({
     id: '/_layout',
@@ -77,6 +90,13 @@ const AppAuthenticatedOnboardingLayoutRoute =
     getParentRoute: () => AppAuthenticatedOnboardingRoute,
   } as any)
 
+const AppAuthenticatedSitesSiteIdRouteRoute =
+  AppAuthenticatedSitesSiteIdRouteImport.update({
+    id: '/sites/$siteId',
+    path: '/sites/$siteId',
+    getParentRoute: () => AppAuthenticatedRoute,
+  } as any)
+
 const AppAuthenticatedSitesLayoutIndexRoute =
   AppAuthenticatedSitesLayoutIndexImport.update({
     id: '/',
@@ -86,9 +106,9 @@ const AppAuthenticatedSitesLayoutIndexRoute =
 
 const AppAuthenticatedSitesSiteIdIndexRoute =
   AppAuthenticatedSitesSiteIdIndexImport.update({
-    id: '/$siteId/',
-    path: '/$siteId/',
-    getParentRoute: () => AppAuthenticatedSitesRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAuthenticatedSitesSiteIdRouteRoute,
   } as any)
 
 const AppAuthenticatedSitesLayoutSettingsRoute =
@@ -96,6 +116,41 @@ const AppAuthenticatedSitesLayoutSettingsRoute =
     id: '/settings',
     path: '/settings',
     getParentRoute: () => AppAuthenticatedSitesLayoutRoute,
+  } as any)
+
+const AppAuthenticatedSitesSiteIdSettingsRoute =
+  AppAuthenticatedSitesSiteIdSettingsImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AppAuthenticatedSitesSiteIdRouteRoute,
+  } as any)
+
+const AppAuthenticatedSitesSiteIdSessionsRoute =
+  AppAuthenticatedSitesSiteIdSessionsImport.update({
+    id: '/sessions',
+    path: '/sessions',
+    getParentRoute: () => AppAuthenticatedSitesSiteIdRouteRoute,
+  } as any)
+
+const AppAuthenticatedSitesSiteIdContextsRoute =
+  AppAuthenticatedSitesSiteIdContextsImport.update({
+    id: '/contexts',
+    path: '/contexts',
+    getParentRoute: () => AppAuthenticatedSitesSiteIdRouteRoute,
+  } as any)
+
+const AppAuthenticatedSitesSiteIdAiChatRoute =
+  AppAuthenticatedSitesSiteIdAiChatImport.update({
+    id: '/ai-chat',
+    path: '/ai-chat',
+    getParentRoute: () => AppAuthenticatedSitesSiteIdRouteRoute,
+  } as any)
+
+const AppAuthenticatedSitesSiteIdPageIdRoute =
+  AppAuthenticatedSitesSiteIdPageIdImport.update({
+    id: '/$pageId',
+    path: '/$pageId',
+    getParentRoute: () => AppAuthenticatedSitesSiteIdRouteRoute,
   } as any)
 
 const AppAuthenticatedOnboardingLayoutUsernameRoute =
@@ -137,6 +192,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuthenticatedImport
       parentRoute: typeof AppImport
     }
+    '/_app/embed/chat': {
+      id: '/_app/embed/chat'
+      path: '/embed/chat'
+      fullPath: '/embed/chat'
+      preLoaderRoute: typeof AppEmbedChatImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/_authenticated/sites/$siteId': {
+      id: '/_app/_authenticated/sites/$siteId'
+      path: '/sites/$siteId'
+      fullPath: '/sites/$siteId'
+      preLoaderRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
+      parentRoute: typeof AppAuthenticatedImport
+    }
     '/_app/_authenticated/onboarding': {
       id: '/_app/_authenticated/onboarding'
       path: '/onboarding'
@@ -172,6 +241,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuthenticatedOnboardingLayoutUsernameImport
       parentRoute: typeof AppAuthenticatedOnboardingLayoutImport
     }
+    '/_app/_authenticated/sites/$siteId/$pageId': {
+      id: '/_app/_authenticated/sites/$siteId/$pageId'
+      path: '/$pageId'
+      fullPath: '/sites/$siteId/$pageId'
+      preLoaderRoute: typeof AppAuthenticatedSitesSiteIdPageIdImport
+      parentRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
+    }
+    '/_app/_authenticated/sites/$siteId/ai-chat': {
+      id: '/_app/_authenticated/sites/$siteId/ai-chat'
+      path: '/ai-chat'
+      fullPath: '/sites/$siteId/ai-chat'
+      preLoaderRoute: typeof AppAuthenticatedSitesSiteIdAiChatImport
+      parentRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
+    }
+    '/_app/_authenticated/sites/$siteId/contexts': {
+      id: '/_app/_authenticated/sites/$siteId/contexts'
+      path: '/contexts'
+      fullPath: '/sites/$siteId/contexts'
+      preLoaderRoute: typeof AppAuthenticatedSitesSiteIdContextsImport
+      parentRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
+    }
+    '/_app/_authenticated/sites/$siteId/sessions': {
+      id: '/_app/_authenticated/sites/$siteId/sessions'
+      path: '/sessions'
+      fullPath: '/sites/$siteId/sessions'
+      preLoaderRoute: typeof AppAuthenticatedSitesSiteIdSessionsImport
+      parentRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
+    }
+    '/_app/_authenticated/sites/$siteId/settings': {
+      id: '/_app/_authenticated/sites/$siteId/settings'
+      path: '/settings'
+      fullPath: '/sites/$siteId/settings'
+      preLoaderRoute: typeof AppAuthenticatedSitesSiteIdSettingsImport
+      parentRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
+    }
     '/_app/_authenticated/sites/_layout/settings': {
       id: '/_app/_authenticated/sites/_layout/settings'
       path: '/settings'
@@ -181,10 +285,10 @@ declare module '@tanstack/react-router' {
     }
     '/_app/_authenticated/sites/$siteId/': {
       id: '/_app/_authenticated/sites/$siteId/'
-      path: '/$siteId'
-      fullPath: '/sites/$siteId'
+      path: '/'
+      fullPath: '/sites/$siteId/'
       preLoaderRoute: typeof AppAuthenticatedSitesSiteIdIndexImport
-      parentRoute: typeof AppAuthenticatedSitesImport
+      parentRoute: typeof AppAuthenticatedSitesSiteIdRouteImport
     }
     '/_app/_authenticated/sites/_layout/': {
       id: '/_app/_authenticated/sites/_layout/'
@@ -204,6 +308,36 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface AppAuthenticatedSitesSiteIdRouteRouteChildren {
+  AppAuthenticatedSitesSiteIdPageIdRoute: typeof AppAuthenticatedSitesSiteIdPageIdRoute
+  AppAuthenticatedSitesSiteIdAiChatRoute: typeof AppAuthenticatedSitesSiteIdAiChatRoute
+  AppAuthenticatedSitesSiteIdContextsRoute: typeof AppAuthenticatedSitesSiteIdContextsRoute
+  AppAuthenticatedSitesSiteIdSessionsRoute: typeof AppAuthenticatedSitesSiteIdSessionsRoute
+  AppAuthenticatedSitesSiteIdSettingsRoute: typeof AppAuthenticatedSitesSiteIdSettingsRoute
+  AppAuthenticatedSitesSiteIdIndexRoute: typeof AppAuthenticatedSitesSiteIdIndexRoute
+}
+
+const AppAuthenticatedSitesSiteIdRouteRouteChildren: AppAuthenticatedSitesSiteIdRouteRouteChildren =
+  {
+    AppAuthenticatedSitesSiteIdPageIdRoute:
+      AppAuthenticatedSitesSiteIdPageIdRoute,
+    AppAuthenticatedSitesSiteIdAiChatRoute:
+      AppAuthenticatedSitesSiteIdAiChatRoute,
+    AppAuthenticatedSitesSiteIdContextsRoute:
+      AppAuthenticatedSitesSiteIdContextsRoute,
+    AppAuthenticatedSitesSiteIdSessionsRoute:
+      AppAuthenticatedSitesSiteIdSessionsRoute,
+    AppAuthenticatedSitesSiteIdSettingsRoute:
+      AppAuthenticatedSitesSiteIdSettingsRoute,
+    AppAuthenticatedSitesSiteIdIndexRoute:
+      AppAuthenticatedSitesSiteIdIndexRoute,
+  }
+
+const AppAuthenticatedSitesSiteIdRouteRouteWithChildren =
+  AppAuthenticatedSitesSiteIdRouteRoute._addFileChildren(
+    AppAuthenticatedSitesSiteIdRouteRouteChildren,
+  )
 
 interface AppAuthenticatedOnboardingLayoutRouteChildren {
   AppAuthenticatedOnboardingLayoutUsernameRoute: typeof AppAuthenticatedOnboardingLayoutUsernameRoute
@@ -270,13 +404,11 @@ const AppAuthenticatedSitesLayoutRouteWithChildren =
 
 interface AppAuthenticatedSitesRouteChildren {
   AppAuthenticatedSitesLayoutRoute: typeof AppAuthenticatedSitesLayoutRouteWithChildren
-  AppAuthenticatedSitesSiteIdIndexRoute: typeof AppAuthenticatedSitesSiteIdIndexRoute
 }
 
 const AppAuthenticatedSitesRouteChildren: AppAuthenticatedSitesRouteChildren = {
   AppAuthenticatedSitesLayoutRoute:
     AppAuthenticatedSitesLayoutRouteWithChildren,
-  AppAuthenticatedSitesSiteIdIndexRoute: AppAuthenticatedSitesSiteIdIndexRoute,
 }
 
 const AppAuthenticatedSitesRouteWithChildren =
@@ -285,11 +417,14 @@ const AppAuthenticatedSitesRouteWithChildren =
   )
 
 interface AppAuthenticatedRouteChildren {
+  AppAuthenticatedSitesSiteIdRouteRoute: typeof AppAuthenticatedSitesSiteIdRouteRouteWithChildren
   AppAuthenticatedOnboardingRoute: typeof AppAuthenticatedOnboardingRouteWithChildren
   AppAuthenticatedSitesRoute: typeof AppAuthenticatedSitesRouteWithChildren
 }
 
 const AppAuthenticatedRouteChildren: AppAuthenticatedRouteChildren = {
+  AppAuthenticatedSitesSiteIdRouteRoute:
+    AppAuthenticatedSitesSiteIdRouteRouteWithChildren,
   AppAuthenticatedOnboardingRoute: AppAuthenticatedOnboardingRouteWithChildren,
   AppAuthenticatedSitesRoute: AppAuthenticatedSitesRouteWithChildren,
 }
@@ -299,10 +434,12 @@ const AppAuthenticatedRouteWithChildren =
 
 interface AppRouteChildren {
   AppAuthenticatedRoute: typeof AppAuthenticatedRouteWithChildren
+  AppEmbedChatRoute: typeof AppEmbedChatRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAuthenticatedRoute: AppAuthenticatedRouteWithChildren,
+  AppEmbedChatRoute: AppEmbedChatRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -310,11 +447,18 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AppAuthenticatedRouteWithChildren
+  '/embed/chat': typeof AppEmbedChatRoute
+  '/sites/$siteId': typeof AppAuthenticatedSitesSiteIdRouteRouteWithChildren
   '/onboarding': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
   '/sites': typeof AppAuthenticatedSitesLayoutRouteWithChildren
   '/onboarding/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+  '/sites/$siteId/$pageId': typeof AppAuthenticatedSitesSiteIdPageIdRoute
+  '/sites/$siteId/ai-chat': typeof AppAuthenticatedSitesSiteIdAiChatRoute
+  '/sites/$siteId/contexts': typeof AppAuthenticatedSitesSiteIdContextsRoute
+  '/sites/$siteId/sessions': typeof AppAuthenticatedSitesSiteIdSessionsRoute
+  '/sites/$siteId/settings': typeof AppAuthenticatedSitesSiteIdSettingsRoute
   '/sites/settings': typeof AppAuthenticatedSitesLayoutSettingsRouteWithChildren
-  '/sites/$siteId': typeof AppAuthenticatedSitesSiteIdIndexRoute
+  '/sites/$siteId/': typeof AppAuthenticatedSitesSiteIdIndexRoute
   '/sites/': typeof AppAuthenticatedSitesLayoutIndexRoute
   '/sites/settings/': typeof AppAuthenticatedSitesLayoutSettingsIndexRoute
 }
@@ -322,9 +466,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AppAuthenticatedRouteWithChildren
+  '/embed/chat': typeof AppEmbedChatRoute
   '/onboarding': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
   '/sites': typeof AppAuthenticatedSitesLayoutIndexRoute
   '/onboarding/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+  '/sites/$siteId/$pageId': typeof AppAuthenticatedSitesSiteIdPageIdRoute
+  '/sites/$siteId/ai-chat': typeof AppAuthenticatedSitesSiteIdAiChatRoute
+  '/sites/$siteId/contexts': typeof AppAuthenticatedSitesSiteIdContextsRoute
+  '/sites/$siteId/sessions': typeof AppAuthenticatedSitesSiteIdSessionsRoute
+  '/sites/$siteId/settings': typeof AppAuthenticatedSitesSiteIdSettingsRoute
   '/sites/$siteId': typeof AppAuthenticatedSitesSiteIdIndexRoute
   '/sites/settings': typeof AppAuthenticatedSitesLayoutSettingsIndexRoute
 }
@@ -334,11 +484,18 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/_authenticated': typeof AppAuthenticatedRouteWithChildren
+  '/_app/embed/chat': typeof AppEmbedChatRoute
+  '/_app/_authenticated/sites/$siteId': typeof AppAuthenticatedSitesSiteIdRouteRouteWithChildren
   '/_app/_authenticated/onboarding': typeof AppAuthenticatedOnboardingRouteWithChildren
   '/_app/_authenticated/onboarding/_layout': typeof AppAuthenticatedOnboardingLayoutRouteWithChildren
   '/_app/_authenticated/sites': typeof AppAuthenticatedSitesRouteWithChildren
   '/_app/_authenticated/sites/_layout': typeof AppAuthenticatedSitesLayoutRouteWithChildren
   '/_app/_authenticated/onboarding/_layout/username': typeof AppAuthenticatedOnboardingLayoutUsernameRoute
+  '/_app/_authenticated/sites/$siteId/$pageId': typeof AppAuthenticatedSitesSiteIdPageIdRoute
+  '/_app/_authenticated/sites/$siteId/ai-chat': typeof AppAuthenticatedSitesSiteIdAiChatRoute
+  '/_app/_authenticated/sites/$siteId/contexts': typeof AppAuthenticatedSitesSiteIdContextsRoute
+  '/_app/_authenticated/sites/$siteId/sessions': typeof AppAuthenticatedSitesSiteIdSessionsRoute
+  '/_app/_authenticated/sites/$siteId/settings': typeof AppAuthenticatedSitesSiteIdSettingsRoute
   '/_app/_authenticated/sites/_layout/settings': typeof AppAuthenticatedSitesLayoutSettingsRouteWithChildren
   '/_app/_authenticated/sites/$siteId/': typeof AppAuthenticatedSitesSiteIdIndexRoute
   '/_app/_authenticated/sites/_layout/': typeof AppAuthenticatedSitesLayoutIndexRoute
@@ -350,20 +507,33 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/embed/chat'
+    | '/sites/$siteId'
     | '/onboarding'
     | '/sites'
     | '/onboarding/username'
+    | '/sites/$siteId/$pageId'
+    | '/sites/$siteId/ai-chat'
+    | '/sites/$siteId/contexts'
+    | '/sites/$siteId/sessions'
+    | '/sites/$siteId/settings'
     | '/sites/settings'
-    | '/sites/$siteId'
+    | '/sites/$siteId/'
     | '/sites/'
     | '/sites/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
+    | '/embed/chat'
     | '/onboarding'
     | '/sites'
     | '/onboarding/username'
+    | '/sites/$siteId/$pageId'
+    | '/sites/$siteId/ai-chat'
+    | '/sites/$siteId/contexts'
+    | '/sites/$siteId/sessions'
+    | '/sites/$siteId/settings'
     | '/sites/$siteId'
     | '/sites/settings'
   id:
@@ -371,11 +541,18 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/_app/_authenticated'
+    | '/_app/embed/chat'
+    | '/_app/_authenticated/sites/$siteId'
     | '/_app/_authenticated/onboarding'
     | '/_app/_authenticated/onboarding/_layout'
     | '/_app/_authenticated/sites'
     | '/_app/_authenticated/sites/_layout'
     | '/_app/_authenticated/onboarding/_layout/username'
+    | '/_app/_authenticated/sites/$siteId/$pageId'
+    | '/_app/_authenticated/sites/$siteId/ai-chat'
+    | '/_app/_authenticated/sites/$siteId/contexts'
+    | '/_app/_authenticated/sites/$siteId/sessions'
+    | '/_app/_authenticated/sites/$siteId/settings'
     | '/_app/_authenticated/sites/_layout/settings'
     | '/_app/_authenticated/sites/$siteId/'
     | '/_app/_authenticated/sites/_layout/'
@@ -413,15 +590,33 @@ export const routeTree = rootRoute
     "/_app": {
       "filePath": "_app.tsx",
       "children": [
-        "/_app/_authenticated"
+        "/_app/_authenticated",
+        "/_app/embed/chat"
       ]
     },
     "/_app/_authenticated": {
       "filePath": "_app/_authenticated.tsx",
       "parent": "/_app",
       "children": [
+        "/_app/_authenticated/sites/$siteId",
         "/_app/_authenticated/onboarding",
         "/_app/_authenticated/sites"
+      ]
+    },
+    "/_app/embed/chat": {
+      "filePath": "_app/embed/chat.tsx",
+      "parent": "/_app"
+    },
+    "/_app/_authenticated/sites/$siteId": {
+      "filePath": "_app/_authenticated/sites/$siteId/route.tsx",
+      "parent": "/_app/_authenticated",
+      "children": [
+        "/_app/_authenticated/sites/$siteId/$pageId",
+        "/_app/_authenticated/sites/$siteId/ai-chat",
+        "/_app/_authenticated/sites/$siteId/contexts",
+        "/_app/_authenticated/sites/$siteId/sessions",
+        "/_app/_authenticated/sites/$siteId/settings",
+        "/_app/_authenticated/sites/$siteId/"
       ]
     },
     "/_app/_authenticated/onboarding": {
@@ -442,8 +637,7 @@ export const routeTree = rootRoute
       "filePath": "_app/_authenticated/sites",
       "parent": "/_app/_authenticated",
       "children": [
-        "/_app/_authenticated/sites/_layout",
-        "/_app/_authenticated/sites/$siteId/"
+        "/_app/_authenticated/sites/_layout"
       ]
     },
     "/_app/_authenticated/sites/_layout": {
@@ -458,6 +652,26 @@ export const routeTree = rootRoute
       "filePath": "_app/_authenticated/onboarding/_layout.username.tsx",
       "parent": "/_app/_authenticated/onboarding/_layout"
     },
+    "/_app/_authenticated/sites/$siteId/$pageId": {
+      "filePath": "_app/_authenticated/sites/$siteId/$pageId.tsx",
+      "parent": "/_app/_authenticated/sites/$siteId"
+    },
+    "/_app/_authenticated/sites/$siteId/ai-chat": {
+      "filePath": "_app/_authenticated/sites/$siteId/ai-chat.tsx",
+      "parent": "/_app/_authenticated/sites/$siteId"
+    },
+    "/_app/_authenticated/sites/$siteId/contexts": {
+      "filePath": "_app/_authenticated/sites/$siteId/contexts.tsx",
+      "parent": "/_app/_authenticated/sites/$siteId"
+    },
+    "/_app/_authenticated/sites/$siteId/sessions": {
+      "filePath": "_app/_authenticated/sites/$siteId/sessions.tsx",
+      "parent": "/_app/_authenticated/sites/$siteId"
+    },
+    "/_app/_authenticated/sites/$siteId/settings": {
+      "filePath": "_app/_authenticated/sites/$siteId/settings.tsx",
+      "parent": "/_app/_authenticated/sites/$siteId"
+    },
     "/_app/_authenticated/sites/_layout/settings": {
       "filePath": "_app/_authenticated/sites/_layout.settings.tsx",
       "parent": "/_app/_authenticated/sites/_layout",
@@ -467,7 +681,7 @@ export const routeTree = rootRoute
     },
     "/_app/_authenticated/sites/$siteId/": {
       "filePath": "_app/_authenticated/sites/$siteId/index.tsx",
-      "parent": "/_app/_authenticated/sites"
+      "parent": "/_app/_authenticated/sites/$siteId"
     },
     "/_app/_authenticated/sites/_layout/": {
       "filePath": "_app/_authenticated/sites/_layout.index.tsx",

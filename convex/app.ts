@@ -1,6 +1,13 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import {
+	type MutationCtx,
+	type QueryCtx,
+	mutation,
+	query,
+} from "./_generated/server";
 import { createOrUpdateUser } from "./users";
+
+const ERROR_NOT_AUTHENTICATED = "User not authenticated";
 
 /**
  * Completes the onboarding process for a new user.
@@ -16,7 +23,7 @@ export const completeOnboarding = mutation({
 	handler: async (ctx, args) => {
 		const identity = await ctx.auth.getUserIdentity();
 		if (!identity) {
-			throw new Error("User not authenticated");
+			throw new Error(ERROR_NOT_AUTHENTICATED);
 		}
 
 		const user = await createOrUpdateUser(ctx, identity.subject, {
@@ -46,7 +53,7 @@ export const generateUploadUrl = mutation({
 	handler: async (ctx) => {
 		const identity = await ctx.auth.getUserIdentity;
 		if (!identity) {
-			throw new Error("User not found");
+			throw new Error(ERROR_NOT_AUTHENTICATED);
 		}
 		return await ctx.storage.generateUploadUrl();
 	},
@@ -96,9 +103,27 @@ export const deleteCurrentUserAccount = mutation({
 			.first();
 
 		if (!user) {
-			throw new Error("User not found");
+			throw new Error(ERROR_NOT_AUTHENTICATED);
 		}
 
 		await ctx.db.delete(user._id);
 	},
 });
+
+export const assertAuthenticated = async (ctx: QueryCtx | MutationCtx) => {
+	const identity = await ctx.auth.getUserIdentity();
+	if (!identity) {
+		throw new Error(ERROR_NOT_AUTHENTICATED);
+	}
+
+	const user = await ctx.db
+		.query("users")
+		.withIndex("by_user_id", (q) => q.eq("userId", identity.subject))
+		.first();
+
+	if (!user) {
+		throw new Error(ERROR_NOT_AUTHENTICATED);
+	}
+
+	return user;
+};

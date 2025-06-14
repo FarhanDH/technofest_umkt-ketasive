@@ -9,8 +9,14 @@
  */
 
 import type * as app from "../app.js";
+import type * as chat from "../chat.js";
+import type * as contexts from "../contexts.js";
+import type * as crawl from "../crawl.js";
 import type * as http from "../http.js";
 import type * as model from "../model.js";
+import type * as pages from "../pages.js";
+import type * as sessions from "../sessions.js";
+import type * as sites from "../sites.js";
 import type * as users from "../users.js";
 
 import type {
@@ -29,8 +35,14 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   app: typeof app;
+  chat: typeof chat;
+  contexts: typeof contexts;
+  crawl: typeof crawl;
   http: typeof http;
   model: typeof model;
+  pages: typeof pages;
+  sessions: typeof sessions;
+  sites: typeof sites;
   users: typeof users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

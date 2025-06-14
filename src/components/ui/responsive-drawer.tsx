@@ -2,33 +2,22 @@
 
 import * as React from "react";
 
+import { Dialog } from "@/components/retroui/dialog";
+import { Text } from "@/components/retroui/text";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import {
 	Drawer,
 	DrawerClose,
 	DrawerContent,
-	DrawerDescription,
 	DrawerFooter,
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { useMediaQuery } from "usehooks-ts";
 
 type ResponsiveDrawerProps = React.PropsWithChildren & {
 	title: string;
-	description?: string;
 	triggerComp: React.ReactNode;
 };
 
@@ -39,15 +28,14 @@ export const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = (props) => {
 	if (isDesktop) {
 		return (
 			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogTrigger asChild>{props.triggerComp}</DialogTrigger>
-				<DialogContent className="sm:max-w-[425px]">
-					<DialogHeader>
-						<DialogTitle>{props.title}</DialogTitle>
-						<DialogDescription>{props.description}</DialogDescription>
-					</DialogHeader>
+				<Dialog.Trigger asChild>{props.triggerComp}</Dialog.Trigger>
+				<Dialog.Content className="sm:max-w-[425px]">
+					<Dialog.Header className="flex">
+						<Text>{props.title}</Text>
+					</Dialog.Header>
 
 					{props.children}
-				</DialogContent>
+				</Dialog.Content>
 			</Dialog>
 		);
 	}
@@ -58,7 +46,6 @@ export const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = (props) => {
 			<DrawerContent>
 				<DrawerHeader className="text-left">
 					<DrawerTitle>{props.title}</DrawerTitle>
-					<DrawerDescription>{props.description}</DrawerDescription>
 				</DrawerHeader>
 				{props.children}
 				<DrawerFooter className="pt-2">
