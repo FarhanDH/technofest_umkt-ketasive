@@ -105,8 +105,8 @@ export function HeroSection() {
 					}}
 					className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400"
 				>
-					Dengan Technofest, balas pesan customer dalam hitungan detik, buka
-					jam. Coba layanan terbaik kami dengan modern UI dan teknolog AI untuk
+					Dengan Wira, balas pesan customer dalam hitungan detik, bukan jam.
+					Coba layanan terbaik kami dengan UI yang modern dan teknologi AI untuk
 					memaksimalkan layanan mu.
 				</motion.p>
 				<motion.div

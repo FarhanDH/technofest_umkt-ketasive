@@ -9,5 +9,5 @@ interface LogoProps {
 }
 
 export function Logo({ width, height, className, ...args }: LogoProps) {
-	return <Text as={"h4"}>Technofest</Text>;
+	return <Text as={"h3"}>Wira</Text>;
 }

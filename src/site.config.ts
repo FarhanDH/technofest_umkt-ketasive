@@ -2,10 +2,10 @@
  * Centralized site configuration, add whatever you need here.
  */
 export default {
-	siteTitle: "Technofest",
+	siteTitle: "Wira",
 	siteDescription:
-		"A Lightweight, Production-Ready Convex Stack for your next SaaS Application.",
-	siteUrl: "https://convex.dev",
+		"Dengan Wira, balas pesan customer dalam hitungan detik, bukan jam. Coba layanan terbaik kami dengan UI yang modern dan teknologi AI untuk memaksimalkan layanan mu.",
+	siteUrl: "https://wira.ai",
 	siteImage: "/images/og-image.png",
 	favicon: "/favicon.ico",
 	twitterHandle: "",

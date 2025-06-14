@@ -45,7 +45,7 @@ export function NavMain({
 									})
 								}
 								className="justify-start"
-								variant={selected.href === item.url ? "secondary" : "ghost"}
+								variant={selected.href === item.url ? "default" : "ghost"}
 							>
 								{item.icon && <item.icon />}
 								<span>{item.title}</span>
